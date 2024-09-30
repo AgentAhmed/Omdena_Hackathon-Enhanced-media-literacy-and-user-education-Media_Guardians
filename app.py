@@ -46,15 +46,6 @@ if st.button("Analyze"):
         st.write(education_result if not isinstance(education_result, dict) else education_result.get('error'))
 
 
-    # # Analyze uploaded PDF if provided
-    # if uploaded_file:
-    #     st.subheader("📑 PDF Analysis")
-    #     pdf_text = process_pdf(uploaded_file)
-    #     if isinstance(pdf_text, dict) and "error" in pdf_text:
-    #         st.error(f"Failed to process PDF: {pdf_text['error']}")
-    #     else:
-    #         st.write("Extracted Text from PDF:")
-    #         st.write(pdf_text)
     
     if uploaded_file:
         st.subheader("📑 PDF Analysis")

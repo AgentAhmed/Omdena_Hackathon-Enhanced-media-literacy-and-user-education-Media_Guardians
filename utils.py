@@ -2,7 +2,7 @@ import PyPDF2
 import os
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
+
 load_dotenv()
 
 def read_pdf(file_path):
@@ -17,8 +17,8 @@ def read_pdf(file_path):
                 text += extracted_text
     except Exception as e:
         print(f"Error reading PDF file '{file_path}': {e}")
-        text = ""  # Optionally return an empty string on error
-    return text.strip()  # Trim the result to remove any leading/trailing whitespace
+        text = "" 
+    return text.strip()  
 
 def process_text(input_text):
     """Preprocess the text input if needed. Currently, it just strips whitespace."""

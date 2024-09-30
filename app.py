@@ -4,7 +4,7 @@ from groq import Groq
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
+
 load_dotenv()
 
 # Initialize agents
@@ -12,7 +12,7 @@ sentiment_agent = SentimentAgent()
 fact_check_agent = FactCheckAgent()
 education_agent = EducationAgent()
 
-# Streamlit app configuration for a wide layout and attractive title
+
 st.set_page_config(page_title="AI-Driven Text and PDF Analysis for Media Literacy", layout="wide")
 st.title("🌟 AI-Driven Text and PDF Analysis for Media Literacy 🌟")
 st.write(
@@ -34,7 +34,7 @@ if st.button("Analyze"):
     # If text is entered, analyze it
     if text_input:
         st.subheader("🧠 Sentiment Analysis Report")
-        sentiment_result = sentiment_agent.analyze_text(text_input)  # Correct method call
+        sentiment_result = sentiment_agent.analyze_text(text_input)  
         st.write(sentiment_result if not isinstance(sentiment_result, dict) else sentiment_result.get('error'))
 
         st.subheader("🔍 Fact-Checking Report")

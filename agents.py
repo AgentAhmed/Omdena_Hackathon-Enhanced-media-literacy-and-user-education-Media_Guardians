@@ -1,9 +1,9 @@
 import os
 from dotenv import load_dotenv
 from groq import Groq
-from PyPDF2 import PdfReader  # Updated PdfReader
+from PyPDF2 import PdfReader  
 
-# Load environment variables
+
 load_dotenv()
 
 # Initialize Groq client
@@ -25,7 +25,7 @@ class FactCheckAgent:
         try:
             chat_completion = client.chat.completions.create(
                 messages=[{"role": "user", "content": f"Fact-check: {text}"}],
-                model="llama3-8b-8192",  # Use Groq model
+                model="llama3-8b-8192", 
             )
             return chat_completion.choices[0].message.content
         except Exception as e:
@@ -36,7 +36,7 @@ class EducationAgent:
         try:
             chat_completion = client.chat.completions.create(
                 messages=[{"role": "user", "content": f"Educational insights: {text}"}],
-                model="llama3-8b-8192",  # Use Groq model
+                model="llama3-8b-8192",  
             )
             return chat_completion.choices[0].message.content
         except Exception as e:

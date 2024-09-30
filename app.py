@@ -13,8 +13,8 @@ fact_check_agent = FactCheckAgent()
 education_agent = EducationAgent()
 
 # Streamlit app configuration for a wide layout and attractive title
-st.set_page_config(page_title="AI-Assisted Text and PDF Analysis", layout="wide")
-st.title("🌟 AI-Assisted Text and PDF Analysis 🌟")
+st.set_page_config(page_title="AI-Driven Text and PDF Analysis for Media Literacy", layout="wide")
+st.title("🌟 AI-Driven Text and PDF Analysis for Media Literacy 🌟")
 st.write(
     """
     **Analyze text and PDF files for sentiment, fact-checking, and educational insights using advanced AI models.**
@@ -56,7 +56,7 @@ if st.button("Analyze"):
             st.write("Extracted Text from PDF:")
             st.write(pdf_text)
 
-# Styling for Streamlit to make the UI more attractive
+
 st.markdown(
     """
     <style>

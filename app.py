@@ -46,15 +46,39 @@ if st.button("Analyze"):
         st.write(education_result if not isinstance(education_result, dict) else education_result.get('error'))
 
 
-    # Analyze uploaded PDF if provided
+    # # Analyze uploaded PDF if provided
+    # if uploaded_file:
+    #     st.subheader("📑 PDF Analysis")
+    #     pdf_text = process_pdf(uploaded_file)
+    #     if isinstance(pdf_text, dict) and "error" in pdf_text:
+    #         st.error(f"Failed to process PDF: {pdf_text['error']}")
+    #     else:
+    #         st.write("Extracted Text from PDF:")
+    #         st.write(pdf_text)
+    
     if uploaded_file:
         st.subheader("📑 PDF Analysis")
         pdf_text = process_pdf(uploaded_file)
+
+        # Check if the PDF text extraction was successful
         if isinstance(pdf_text, dict) and "error" in pdf_text:
             st.error(f"Failed to process PDF: {pdf_text['error']}")
         else:
             st.write("Extracted Text from PDF:")
             st.write(pdf_text)
+
+            # Perform analysis on the extracted PDF text
+            st.subheader("🧠 Analysis Report for PDF")
+            sentiment_result_pdf = sentiment_agent.analyze_text(pdf_text)
+            st.write(sentiment_result_pdf if not isinstance(sentiment_result_pdf, dict) else sentiment_result_pdf.get('error'))
+
+            st.subheader("🔍 Fact-Checking Report for PDF")
+            fact_check_result_pdf = fact_check_agent.check_facts(pdf_text)
+            st.write(fact_check_result_pdf if not isinstance(fact_check_result_pdf, dict) else fact_check_result_pdf.get('error'))
+
+            st.subheader("🎓 Educational Insights for PDF")
+            education_result_pdf = education_agent.analyze_for_education(pdf_text)
+            st.write(education_result_pdf if not isinstance(education_result_pdf, dict) else education_result_pdf.get('error'))
 
 
 st.markdown(

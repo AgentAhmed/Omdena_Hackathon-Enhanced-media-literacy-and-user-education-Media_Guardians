@@ -33,7 +33,7 @@ uploaded_file = st.file_uploader("Choose a PDF file", type="pdf")
 if st.button("Analyze"):
     # If text is entered, analyze it
     if text_input:
-        st.subheader("🧠 Sentiment Analysis Report")
+        st.subheader("🧠 Analysis Report")
         sentiment_result = sentiment_agent.analyze_text(text_input)  
         st.write(sentiment_result if not isinstance(sentiment_result, dict) else sentiment_result.get('error'))
 

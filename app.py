@@ -161,10 +161,19 @@ def generate_pdf(analysis_results):
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
 
-    # Add the font (replace 'fonts/DejaVuSans.ttf' with the correct path if needed)
-    font_path = os.path.join("fonts", "DejaVuSans.ttf")
+    # # Add the font (replace 'fonts/DejaVuSans.ttf' with the correct path if needed)
+    # font_path = os.path.join("fonts", "fonts/DejaVuSans.ttf")
+    # pdf.add_font('DejaVu', '', font_path, uni=True)
+    # pdf.set_font("DejaVu", size=12)
+    # Dynamically calculate the font path relative to the script location
+    font_path = os.path.join(os.path.dirname(__file__), "fonts", "DejaVuSans.ttf")
+
+    # Add the font to the PDF
     pdf.add_font('DejaVu', '', font_path, uni=True)
+
+    # Set the font to DejaVu and set the font size
     pdf.set_font("DejaVu", size=12)
+
 
     
 

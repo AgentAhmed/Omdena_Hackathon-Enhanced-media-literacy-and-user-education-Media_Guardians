@@ -153,20 +153,35 @@ if st.button("Run Analysis") and content_to_analyze:
         st.error(content_to_analyze.get("error", "Error occurred during content extraction"))
 
 
-# Function to generate PDF
-def generate_pdf(analysis_results):
-    pdf = FPDF()
+# # Function to generate PDF
+# def generate_pdf(analysis_results):
+#     pdf = FPDF()
 
-    # Set up Unicode font (ensure DejaVuSans.ttf is in the fonts folder)
-    pdf.add_page()
-    pdf.set_auto_page_break(auto=True, margin=15)
+#     # Set up Unicode font (ensure DejaVuSans.ttf is in the fonts folder)
+#     pdf.add_page()
+#     pdf.set_auto_page_break(auto=True, margin=15)
 
-    # # Add the font (replace 'fonts/DejaVuSans.ttf' with the correct path if needed)
-    # font_path = os.path.join("fonts", "fonts/DejaVuSans.ttf")
-    # pdf.add_font('DejaVu', '', font_path, uni=True)
-    # pdf.set_font("DejaVu", size=12)
-#    # Dynamically calculate the font path relative to the script location
-#     font_path = os.path.join(os.path.dirname(__file__), "DejaVuSans.ttf")
+#     # # Add the font (replace 'fonts/DejaVuSans.ttf' with the correct path if needed)
+#     # font_path = os.path.join("fonts", "fonts/DejaVuSans.ttf")
+#     # pdf.add_font('DejaVu', '', font_path, uni=True)
+#     # pdf.set_font("DejaVu", size=12)
+# #    # Dynamically calculate the font path relative to the script location
+# #     font_path = os.path.join(os.path.dirname(__file__), "DejaVuSans.ttf")
+
+# #     # Check if the font file exists (useful for debugging)
+# #     if not os.path.exists(font_path):
+# #         print(f"Font file not found at: {font_path}")
+# #     else:
+# #         print(f"Font file found at: {font_path}")
+
+# #     # Add the font to the PDF (ensure the font file is in the correct path)
+# #     pdf.add_font('DejaVu', '', font_path, uni=True)
+
+# #     # Set the font to DejaVu and set the font size
+# #     pdf.set_font("DejaVu", size=12)
+
+#      # Set the font path relative to the current working directory (root of the app)
+#     font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")
 
 #     # Check if the font file exists (useful for debugging)
 #     if not os.path.exists(font_path):
@@ -175,33 +190,69 @@ def generate_pdf(analysis_results):
 #         print(f"Font file found at: {font_path}")
 
 #     # Add the font to the PDF (ensure the font file is in the correct path)
-#     pdf.add_font('DejaVu', '', font_path, uni=True)
+#     try:
+#         pdf.add_font('DejaVu', '', font_path, uni=True)
+#         pdf.set_font("DejaVu", size=12)
+#     except Exception as e:
+#         print(f"Error adding font: {e}")
+#         raise
+    
 
-#     # Set the font to DejaVu and set the font size
-#     pdf.set_font("DejaVu", size=12)
+#     pdf.cell(200, 10, "AI-Driven Text Analysis Report", ln=True, align="C")
+#     pdf.ln(10)
 
-     # Set the font path relative to the current working directory (root of the app)
-    font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")
+#     # Add content to the PDF
+#     for section, content in analysis_results.items():
+#         pdf.cell(0, 10, f"{section}:", ln=True)
+#         content_str = '\n'.join(content) if isinstance(content, list) else content
+#         pdf.multi_cell(0, 10, content_str)
+#         pdf.ln(5)
 
-    # Check if the font file exists (useful for debugging)
+#     # Create a BytesIO object to hold the generated PDF
+#     pdf_output = BytesIO()
+#     pdf.output(pdf_output, 'S')
+#     pdf_output.seek(0)
+
+#     return pdf_output 
+
+# Function to generate PDF
+def generate_pdf(analysis_results):
+    pdf = FPDF()
+
+    # Add a page to the PDF
+    pdf.add_page()
+
+    # Set auto page break
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Set the path for the font relative to the Streamlit app
+    # Assuming the font file is in the root directory or a "fonts" folder.
+    font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")  # Change this if it's in a folder like 'fonts'
+
+    # Check if the font file exists
     if not os.path.exists(font_path):
         print(f"Font file not found at: {font_path}")
+        # Display error message in Streamlit if the font isn't found
+        st.error("Font file not found!")
+        return None
     else:
         print(f"Font file found at: {font_path}")
 
-    # Add the font to the PDF (ensure the font file is in the correct path)
+    # Add the font to the PDF
     try:
         pdf.add_font('DejaVu', '', font_path, uni=True)
         pdf.set_font("DejaVu", size=12)
     except Exception as e:
         print(f"Error adding font: {e}")
-        raise
-    
+        # Display error message in Streamlit if the font addition fails
+        st.error(f"Error adding font: {e}")
+        return None
 
+    # Add title cell to the PDF
     pdf.cell(200, 10, "AI-Driven Text Analysis Report", ln=True, align="C")
-    pdf.ln(10)
+    pdf.ln(10)  # Add a line break
 
-    # Add content to the PDF
+    # Add the analysis content using multi_cell to handle multiline text
     for section, content in analysis_results.items():
         pdf.cell(0, 10, f"{section}:", ln=True)
         content_str = '\n'.join(content) if isinstance(content, list) else content

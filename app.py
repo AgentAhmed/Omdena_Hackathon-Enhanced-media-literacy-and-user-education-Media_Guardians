@@ -239,8 +239,8 @@ def generate_pdf(analysis_results):
 
     # Add the font to the PDF
     try:
-        pdf.add_font('DejaVu', '', font_path, uni=True)
-        pdf.set_font("DejaVu", size=12)
+        pdf.add_font('DejaVuSans', '', font_path, uni=True)  # Use 'DejaVuSans' to match the actual font file name
+        pdf.set_font("DejaVuSans", size=12)  # Ensure the same name here
     except Exception as e:
         print(f"Error adding font: {e}")
         # Display error message in Streamlit if the font addition fails

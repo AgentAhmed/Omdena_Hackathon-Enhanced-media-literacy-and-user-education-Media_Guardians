@@ -162,11 +162,11 @@ def generate_pdf(analysis_results):
     pdf.set_auto_page_break(auto=True, margin=15)
 
     # Add the font (replace 'fonts/DejaVuSans.ttf' with the correct path if needed)
-    # font_path = os.path.join("fonts", "DejaVuSans.ttf")  # Update the path if necessary
-    font_path = os.path.join(os.path.dirname(__file__), "fonts", "DejaVuSans.ttf")
-
+    font_path = os.path.join("fonts", "DejaVuSans.ttf")
     pdf.add_font('DejaVu', '', font_path, uni=True)
     pdf.set_font("DejaVu", size=12)
+
+    
 
     pdf.cell(200, 10, "AI-Driven Text Analysis Report", ln=True, align="C")
     pdf.ln(10)

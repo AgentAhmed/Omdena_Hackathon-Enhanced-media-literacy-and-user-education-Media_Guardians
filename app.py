@@ -165,8 +165,23 @@ def generate_pdf(analysis_results):
     # font_path = os.path.join("fonts", "fonts/DejaVuSans.ttf")
     # pdf.add_font('DejaVu', '', font_path, uni=True)
     # pdf.set_font("DejaVu", size=12)
-   # Dynamically calculate the font path relative to the script location
-    font_path = os.path.join(os.path.dirname(__file__), "DejaVuSans.ttf")
+#    # Dynamically calculate the font path relative to the script location
+#     font_path = os.path.join(os.path.dirname(__file__), "DejaVuSans.ttf")
+
+#     # Check if the font file exists (useful for debugging)
+#     if not os.path.exists(font_path):
+#         print(f"Font file not found at: {font_path}")
+#     else:
+#         print(f"Font file found at: {font_path}")
+
+#     # Add the font to the PDF (ensure the font file is in the correct path)
+#     pdf.add_font('DejaVu', '', font_path, uni=True)
+
+#     # Set the font to DejaVu and set the font size
+#     pdf.set_font("DejaVu", size=12)
+
+     # Set the font path relative to the current working directory (root of the app)
+    font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")
 
     # Check if the font file exists (useful for debugging)
     if not os.path.exists(font_path):
@@ -175,10 +190,12 @@ def generate_pdf(analysis_results):
         print(f"Font file found at: {font_path}")
 
     # Add the font to the PDF (ensure the font file is in the correct path)
-    pdf.add_font('DejaVu', '', font_path, uni=True)
-
-    # Set the font to DejaVu and set the font size
-    pdf.set_font("DejaVu", size=12)
+    try:
+        pdf.add_font('DejaVu', '', font_path, uni=True)
+        pdf.set_font("DejaVu", size=12)
+    except Exception as e:
+        print(f"Error adding font: {e}")
+        raise
     
 
     pdf.cell(200, 10, "AI-Driven Text Analysis Report", ln=True, align="C")

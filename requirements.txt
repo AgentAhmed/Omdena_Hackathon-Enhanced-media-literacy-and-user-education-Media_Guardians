@@ -1,9 +1,15 @@
+groq
+PyPDF2
 python-dotenv
 requests
+beautifulsoup4
+pandas
+openai  # If you are using OpenAI's GPT models
 streamlit
-PyPDF2
-groq
-
+python-docx
+fpdf
+fpdf2
+openpyxl
 
 
 

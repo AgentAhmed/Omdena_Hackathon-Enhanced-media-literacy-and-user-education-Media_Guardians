@@ -229,14 +229,13 @@ def generate_pdf(analysis_results):
     # Assuming the font file is in the root directory or a "fonts" folder.
     font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")  # Change this if it's in a folder like 'fonts'
 
-    # Check if the font file exists
+   # Download the font if it does not exist on Streamlit Cloud (in case it is required)
     if not os.path.exists(font_path):
-        print(f"Font file not found at: {font_path}")
-        # Display error message in Streamlit if the font isn't found
-        st.error("Font file not found!")
-        return None
-    else:
-        print(f"Font file found at: {font_path}")
+        import requests
+        font_url = "https://github.com/dejavu-fonts/dejavu-fonts/raw/master/ttf/DejaVuSans.ttf"
+        response = requests.get(font_url)
+        with open(font_path, "wb") as f:
+            f.write(response.content)
 
     # Add the font to the PDF
     try:

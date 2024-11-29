@@ -10,6 +10,7 @@ python-docx
 fpdf
 fpdf2
 openpyxl
+reportlab
 
 
 

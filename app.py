@@ -265,6 +265,8 @@ def generate_pdf(analysis_results):
 
     return pdf_output
 
+
+
 # Function to handle the download button click without page reset
 def download_clicked():
     st.session_state["download_clicked"] = True

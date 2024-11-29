@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 load_dotenv()
 
 # Initialize Groq client
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 class SentimentAgent:
     def analyze_text(self, text):

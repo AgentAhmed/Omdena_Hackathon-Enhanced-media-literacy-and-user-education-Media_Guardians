@@ -1,4 +1,5 @@
 import os
+import streamlit as st
 from dotenv import load_dotenv
 from groq import Groq
 from PyPDF2 import PdfReader
@@ -7,10 +8,12 @@ import pandas as pd  # For CSV and Excel files
 import requests
 from bs4 import BeautifulSoup
 
+# Load the .env file locally
 load_dotenv()
 
 # Initialize Groq client
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+# client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
 class SentimentAgent:
     def analyze_text(self, text):

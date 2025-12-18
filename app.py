@@ -47,75 +47,75 @@ analyze_option = st.sidebar.checkbox("Analysis")
 fact_check_option = st.sidebar.checkbox("Fact-Checking")
 education_option = st.sidebar.checkbox("Educational Insights")
 # If voice_option is selected, show a message saying the feature is coming soon
-# if voice_option:
-#     st.sidebar.info("🔊 Voice Command feature is coming soon! Stay tuned.")
-
 if voice_option:
-    st.info("🎤 Real-time Voice Command Enabled")
+    st.sidebar.info("🔊 Voice Command feature is coming soon! Stay tuned.")
 
-    # --- Start of voice input code ---
-    from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
-    import speech_recognition as sr
-    import numpy as np
-    import queue
-    import threading
-    import time
-    import io, wave
+# if voice_option:
+#     st.info("🎤 Real-time Voice Command Enabled")
 
-    audio_queue = queue.Queue()
+#     # --- Start of voice input code ---
+#     from streamlit_webrtc import webrtc_streamer, WebRtcMode, ClientSettings
+#     import speech_recognition as sr
+#     import numpy as np
+#     import queue
+#     import threading
+#     import time
+#     import io, wave
 
-    def recognize_audio(q):
-        r = sr.Recognizer()
-        while not q.empty():
-            frames = q.get()
-            audio_data = np.concatenate(frames, axis=0)
+#     audio_queue = queue.Queue()
 
-            # Convert numpy array to WAV in memory
-            wav_io = io.BytesIO()
-            with wave.open(wav_io, "wb") as wf:
-                wf.setnchannels(1)
-                wf.setsampwidth(2)  # 16-bit PCM
-                wf.setframerate(16000)
-                wf.writeframes(audio_data.tobytes())
-            wav_io.seek(0)
+#     def recognize_audio(q):
+#         r = sr.Recognizer()
+#         while not q.empty():
+#             frames = q.get()
+#             audio_data = np.concatenate(frames, axis=0)
 
-            with sr.AudioFile(wav_io) as source:
-                audio = r.record(source)
-                try:
-                    text = r.recognize_google(audio)
-                    q.put(text)
-                except sr.UnknownValueError:
-                    q.put("")
-                except Exception as e:
-                    q.put(f"Error: {e}")
+#             # Convert numpy array to WAV in memory
+#             wav_io = io.BytesIO()
+#             with wave.open(wav_io, "wb") as wf:
+#                 wf.setnchannels(1)
+#                 wf.setsampwidth(2)  # 16-bit PCM
+#                 wf.setframerate(16000)
+#                 wf.writeframes(audio_data.tobytes())
+#             wav_io.seek(0)
 
-    webrtc_ctx = webrtc_streamer(
-        key="voice-input",
-        mode=WebRtcMode.SENDONLY,
-        client_settings=ClientSettings(
-            media_stream_constraints={"audio": True, "video": False},
-        ),
-        async_processing=True,
-    )
+#             with sr.AudioFile(wav_io) as source:
+#                 audio = r.record(source)
+#                 try:
+#                     text = r.recognize_google(audio)
+#                     q.put(text)
+#                 except sr.UnknownValueError:
+#                     q.put("")
+#                 except Exception as e:
+#                     q.put(f"Error: {e}")
 
-    if webrtc_ctx.audio_receiver:
-        audio_frames = []
-        # Collect frames for a few seconds
-        for _ in range(50):  # Adjust for longer recording
-            frame = webrtc_ctx.audio_receiver.get_frame(timeout=1)
-            if frame is not None:
-                audio_frames.append(frame.to_ndarray()[0])
-        if audio_frames:
-            audio_queue.put(audio_frames)
-            recognize_thread = threading.Thread(target=recognize_audio, args=(audio_queue,))
-            recognize_thread.start()
-            time.sleep(2)
-            if not audio_queue.empty():
-                recognized_text = audio_queue.get()
-                if recognized_text:
-                    st.success(f"Recognized Text: {recognized_text}")
-                    content_to_analyze = recognized_text  # Feed to analysis
-    # --- End of voice input code ---
+#     webrtc_ctx = webrtc_streamer(
+#         key="voice-input",
+#         mode=WebRtcMode.SENDONLY,
+#         client_settings=ClientSettings(
+#             media_stream_constraints={"audio": True, "video": False},
+#         ),
+#         async_processing=True,
+#     )
+
+#     if webrtc_ctx.audio_receiver:
+#         audio_frames = []
+#         # Collect frames for a few seconds
+#         for _ in range(50):  # Adjust for longer recording
+#             frame = webrtc_ctx.audio_receiver.get_frame(timeout=1)
+#             if frame is not None:
+#                 audio_frames.append(frame.to_ndarray()[0])
+#         if audio_frames:
+#             audio_queue.put(audio_frames)
+#             recognize_thread = threading.Thread(target=recognize_audio, args=(audio_queue,))
+#             recognize_thread.start()
+#             time.sleep(2)
+#             if not audio_queue.empty():
+#                 recognized_text = audio_queue.get()
+#                 if recognized_text:
+#                     st.success(f"Recognized Text: {recognized_text}")
+#                     content_to_analyze = recognized_text  # Feed to analysis
+#     # --- End of voice input code ---
     
 
 # Function to chunk the content into smaller parts (for large text)

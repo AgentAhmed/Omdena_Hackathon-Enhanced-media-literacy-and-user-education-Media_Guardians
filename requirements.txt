@@ -11,6 +11,10 @@ fpdf
 fpdf2
 openpyxl
 reportlab
+streamlit-webrtc 
+speechrecognition 
+pyaudio
+
 
 
 

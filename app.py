@@ -10,6 +10,7 @@ from docx import Document  # To generate Word files
 from agents import SentimentAgent, FactCheckAgent, EducationAgent, process_pdf, process_docx, process_csv, process_excel, process_url
 import textwrap
 import openpyxl
+import requests
 
 
 

@@ -1,7 +1,6 @@
-# Omdena_Hackathon-Enhanced-media-literacy-and-user-education-Media_Guardians
+# 🛡️ Omdena_Hackathon-Enhanced-media-literacy-and-user-education-Media_Guardians
 
 
-# 🛡️ Media Guardians  
 ### AI-Driven Text & Document Analysis for Media Literacy
 
 🔗 **Live App:**  

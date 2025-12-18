@@ -216,19 +216,11 @@ if st.button("Run Analysis") and content_to_analyze:
 #     return pdf_output 
 
 def generate_pdf(analysis_results):
-    """
-    Generate a PDF report from analysis_results dictionary.
-    Fully compatible with Streamlit Cloud and FPDF 2.x.
-    Uses only regular font style to avoid FPDFException.
-    """
-
     pdf = FPDF()
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
 
-    # -------------------------
-    # Ensure DejaVuSans font exists
-    # -------------------------
+    # Ensure font exists
     font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")
     if not os.path.exists(font_path):
         font_url = "https://github.com/dejavu-fonts/dejavu-fonts/raw/master/ttf/DejaVuSans.ttf"
@@ -238,30 +230,24 @@ def generate_pdf(analysis_results):
 
     try:
         pdf.add_font("DejaVuSans", "", font_path, uni=True)
-        pdf.set_font("DejaVuSans", '', 12)  # regular style only
+        pdf.set_font("DejaVuSans", '', 12)
     except Exception as e:
         st.error(f"Error adding font: {e}")
         return None
 
-    # -------------------------
-    # Add report title
-    # -------------------------
+    # Add title
     pdf.cell(200, 10, "🌟 AI-Driven Text Analysis Report 🌟", ln=True, align="C")
     pdf.ln(10)
 
-    # -------------------------
-    # Add analysis content
-    # -------------------------
+    # Add content
     for section, content in analysis_results.items():
-        pdf.set_font("DejaVuSans", '', 12)  # regular font for section title
+        pdf.set_font("DejaVuSans", '', 12)
         pdf.cell(0, 10, f"{section}:", ln=True)
         pdf.ln(2)
 
-        # Handle lists of chunks or string content
         if isinstance(content, list):
             for idx, item in enumerate(content, start=1):
                 text = str(item)
-                # Add chunk number if content has multiple items
                 if len(content) > 1:
                     pdf.multi_cell(0, 10, f"Chunk {idx}:\n{text}")
                 else:
@@ -271,10 +257,10 @@ def generate_pdf(analysis_results):
             pdf.multi_cell(0, 10, str(content))
             pdf.ln(5)
 
-    # -------------------------
     # Convert PDF to BytesIO
-    # -------------------------
-    pdf_bytes = pdf.output(dest='S').encode('latin1')
+    pdf_bytes = pdf.output(dest='S')  # Do NOT encode, FPDF already returns bytes/str properly
+    if isinstance(pdf_bytes, str):
+        pdf_bytes = pdf_bytes.encode('latin1')  # only encode if it's str
     pdf_buffer = BytesIO(pdf_bytes)
     pdf_buffer.seek(0)
     return pdf_buffer

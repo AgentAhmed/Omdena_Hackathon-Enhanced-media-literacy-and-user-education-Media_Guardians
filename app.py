@@ -217,79 +217,72 @@ if st.button("Run Analysis") and content_to_analyze:
 
 # Function to generate PDF
 def generate_pdf(analysis_results):
+    """
+    Generate a PDF report from the analysis_results dictionary.
+    Handles multi-chunk content and ensures font compatibility.
+    """
     pdf = FPDF()
-
-    # Add a page to the PDF
     pdf.add_page()
-
-    # Set auto page break
     pdf.set_auto_page_break(auto=True, margin=15)
 
-    # Set the path for the font relative to the Streamlit app
-    # Assuming the font file is in the root directory or a "fonts" folder.
-    font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")  # Change this if it's in a folder like 'fonts'
-
-   # Download the font if it does not exist on Streamlit Cloud (in case it is required)
+    # Ensure DejaVuSans font exists (for Unicode support)
+    font_path = os.path.join(os.getcwd(), "DejaVuSans.ttf")
     if not os.path.exists(font_path):
-        import requests
         font_url = "https://github.com/dejavu-fonts/dejavu-fonts/raw/master/ttf/DejaVuSans.ttf"
-        response = requests.get(font_url)
+        r = requests.get(font_url)
         with open(font_path, "wb") as f:
-            f.write(response.content)
+            f.write(r.content)
 
-    # Add the font to the PDF
     try:
-        pdf.add_font('DejaVuSans', '', font_path, uni=True)  # Use 'DejaVuSans' to match the actual font file name
-        pdf.set_font("DejaVuSans", size=12)  # Ensure the same name here
+        pdf.add_font("DejaVuSans", "", font_path, uni=True)
+        pdf.set_font("DejaVuSans", size=12)
     except Exception as e:
-        print(f"Error adding font: {e}")
-        # Display error message in Streamlit if the font addition fails
         st.error(f"Error adding font: {e}")
         return None
 
-    # Add title cell to the PDF
-    pdf.cell(200, 10, "AI-Driven Text Analysis Report", ln=True, align="C")
-    pdf.ln(10)  # Add a line break
+    # Add title
+    pdf.cell(200, 10, "🌟 AI-Driven Text Analysis Report 🌟", ln=True, align="C")
+    pdf.ln(10)
 
-    # Add the analysis content using multi_cell to handle multiline text
+    # Add each section with multi-cell support
     for section, content in analysis_results.items():
+        pdf.set_font("DejaVuSans", 'B', 12)
         pdf.cell(0, 10, f"{section}:", ln=True)
-        content_str = '\n'.join(content) if isinstance(content, list) else content
-        pdf.multi_cell(0, 10, content_str)
-        pdf.ln(5)
+        pdf.set_font("DejaVuSans", '', 12)
 
-    # Create a BytesIO object to hold the generated PDF
-    pdf_output = BytesIO()
-    pdf.output(pdf_output, 'S')
-    pdf_output.seek(0)
+        # Handle lists or strings
+        if isinstance(content, list):
+            for item in content:
+                item_str = str(item)
+                pdf.multi_cell(0, 10, item_str)
+                pdf.ln(2)
+        else:
+            pdf.multi_cell(0, 10, str(content))
+            pdf.ln(5)
 
-    return pdf_output
+    # Convert PDF to bytes for Streamlit download
+    pdf_bytes = pdf.output(dest='S').encode('latin1')
+    pdf_buffer = BytesIO(pdf_bytes)
+    pdf_buffer.seek(0)
+    return pdf_buffer
 
-
-
-# Function to handle the download button click without page reset
-def download_clicked():
-    st.session_state["download_clicked"] = True
-
-# Initialize session state for the download click if not already set
-if "download_clicked" not in st.session_state:
-    st.session_state["download_clicked"] = False
-
-# Ensure analysis_results is defined elsewhere in your app
+# -------------------------
+# Download button logic
+# -------------------------
 if 'analysis_results' in locals() and analysis_results:
-    # Generate the PDF buffer in memory
     pdf_buffer = generate_pdf(analysis_results)
-    
-    # Provide the option to download the PDF in the sidebar with a unique key
-    st.sidebar.download_button(
-        label="Download as PDF",
-        data=pdf_buffer,
-        file_name="analysis_report.pdf",
-        mime="application/pdf",
-        key="unique_pdf_download",
-        on_click=download_clicked
-    )
-    
-    # Display message after download to confirm action
-    if st.session_state["download_clicked"]:
-        st.success("Click the download button to download the PDF report")
+    if pdf_buffer:
+        if "download_clicked" not in st.session_state:
+            st.session_state["download_clicked"] = False
+
+        st.sidebar.download_button(
+            label="📥 Download PDF Report",
+            data=pdf_buffer,
+            file_name="analysis_report.pdf",
+            mime="application/pdf",
+            key="pdf_download",
+            on_click=lambda: st.session_state.update({"download_clicked": True})
+        )
+
+        if st.session_state["download_clicked"]:
+            st.success("✅ Click the download button to save your PDF report!")

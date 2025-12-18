@@ -10,7 +10,7 @@
 
 ## 📌 Project Overview
 
-**Media Guardians** is an AI-powered web application developed during the **Omdena Hackathon** to enhance **media literacy and critical thinking**.
+** AI-Driven Text and Document Analysis** is an AI-powered web application developed during the **Omdena Hackathon** to enhance **media literacy and critical thinking**.
 
 In an era of misinformation and information overload, this tool helps users:
 - Understand the **sentiment** behind content  

@@ -1,17 +1,13 @@
-streamlit
-streamlit-webrtc
-speechrecognition
-pyaudio
-av
-numpy
-
 groq
 PyPDF2
 python-dotenv
 requests
 beautifulsoup4
 pandas
+openai  # If you are using OpenAI's GPT models
+streamlit
 python-docx
+fpdf
 fpdf2
 openpyxl
 reportlab
